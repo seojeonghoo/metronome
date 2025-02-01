@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리드인 집중력 훈련</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #ffb347);
+            color: #333;
+        }
+        #counter {
+            font-size: 6rem; /* Increased font size */
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px; /* Increased padding */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            font-size: 2rem; /* Increased font size */
+            padding: 20px 40px; /* Increased padding */
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background: #ff8c42;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff6f00;
+        }
+    </style>
+</head>
+<body>
+    <div id="counter">0</div>
+    <button id="startStop">START</button>
+    <audio id="tick" src="metronome-85688.mp3" preload="auto"></audio>
+    
+    <script>
+        document.body.style.overflow = 'hidden';
+        let isRunning = false;
+        let count = 0;
+        let interval;
+        const counter = document.getElementById("counter");
+        const button = document.getElementById("startStop");
+        const tickSound = document.getElementById("tick");
+        counter.addEventListener("click", () => {
+            count = 0;
+            counter.textContent = count;
+            if (isRunning) {
+            clearInterval(interval);
+            isRunning = false;
+            button.textContent = "START";
+            }
+        });
+        button.addEventListener("click", () => {
+            if (isRunning) {
+                clearInterval(interval);
+                isRunning = false;
+                button.textContent = "START";
+            } else {
+                interval = setInterval(() => {
+                    counter.textContent = ++count;
+                    tickSound.currentTime = 0;
+                    tickSound.play();
+                }, 550);
+                isRunning = true;
+                button.textContent = "STOP";
+            }
+        });
+    </script>
+</body>
+</html>
