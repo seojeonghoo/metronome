@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리드인 집중력 훈련</title>
+    <title>Metronome by JH</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="gradient.css">
     <style>
         body {
             display: flex;
@@ -39,14 +41,42 @@
         button:hover {
             background: #ff6f00;
         }
+        body {
+            animation: gradientShift 10s infinite linear;
+        }
     </style>
+    
 </head>
 <body>
+    <img src="logo1.png" alt="Logo" style="position: absolute; top: 20px; left: 20px; width: auto; height: 80px;">
     <div id="counter">0</div>
     <button id="startStop">START</button>
-    <audio id="tick" src="metronome-85688.mp3" preload="auto"></audio>
+    <audio id="tick" src="tick.mp3" preload="auto" volume="1.0"></audio>
     
     <script>
+        // 폰 화면 꺼지지 않게 하기
+        if ('wakeLock' in navigator) {
+            let wakeLock = null;
+            const requestWakeLock = async () => {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Screen Wake Lock released:', wakeLock.released);
+                    });
+                    console.log('Screen Wake Lock acquired:', wakeLock.released);
+                } catch (err) {
+                    console.error(`${err.name}, ${err.message}`);
+                }
+            };
+            document.addEventListener('visibilitychange', () => {
+                if (wakeLock !== null && document.visibilityState === 'visible') {
+                    requestWakeLock();
+                }
+            });
+            requestWakeLock();
+        }
+
+        // 메트로놈
         document.body.style.overflow = 'hidden';
         let isRunning = false;
         let count = 0;
